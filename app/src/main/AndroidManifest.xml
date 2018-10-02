@@ -3,14 +3,14 @@
     package="com.autodidact.developers.festivalwish">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -28,25 +28,25 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_path" />
         </provider>
+
         <activity android:name="com.autodidact.developers.festivalwish.SplashScreenActivity">
             <intent-filter>
 
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-
+                <category android:name="android.intent.category.LAUNCHER" />
 
 
             </intent-filter>
         </activity>
-            <activity android:name="com.autodidact.developers.festivalwish.MainActivity">
-                <intent-filter>
-                    <action android:name="android.intent.action.MAIN" />
+        <activity android:name="com.autodidact.developers.festivalwish.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-            </activity>
-            <activity android:name="com.autodidact.developers.festivalwish.ImageListActivity"></activity>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.autodidact.developers.festivalwish.ImageListActivity"></activity>
 
         <activity android:name="com.autodidact.developers.festivalwish.NoConnection"></activity>
     </application>

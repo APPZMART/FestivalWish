@@ -29,14 +29,14 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 public class ImageListActivity extends AppCompatActivity {
-    private ProgressDialog progressDialog;
-    private DatabaseReference mDatabaseRef;
     public static StorageReference mStorageRef;
     public List<ImageUpload> imgList;
     public RecyclerView vertical_recycler_view;
     String answer1;
-
     FirebaseAuth mAuth;
+    private ProgressDialog progressDialog;
+    private DatabaseReference mDatabaseRef;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,17 +51,17 @@ public class ImageListActivity extends AppCompatActivity {
 
 
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
-                .getSystemService( Context.CONNECTIVITY_SERVICE);
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (null != activeNetwork) {
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            setContentView( R.layout.image_list );
-            vertical_recycler_view = (RecyclerView) findViewById( R.id.RecyclerViewImageList );
-            imgList = new ArrayList <>();
+            setContentView(R.layout.image_list);
+            vertical_recycler_view = findViewById(R.id.RecyclerViewImageList);
+            imgList = new ArrayList<>();
 
-            progressDialog = new ProgressDialog( this );
-            progressDialog.setMessage( "Please wait. loading..." );
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Please wait. loading...");
             progressDialog.show();
 
 
@@ -69,25 +69,25 @@ public class ImageListActivity extends AppCompatActivity {
 
             String FB_STORAGE_PATH = bundle.getString("DBPATH");
 
-            String FB_DATABASE_PATH = bundle.getString( "DBPATH" );
+            String FB_DATABASE_PATH = bundle.getString("DBPATH");
             mStorageRef = FirebaseStorage.getInstance().getReference(FB_STORAGE_PATH);
             mDatabaseRef = FirebaseDatabase.getInstance().getReference(FB_DATABASE_PATH);
             //StorageRef = FirebaseStorage.getInstance().getReference();
-            mDatabaseRef.addValueEventListener( new ValueEventListener() {
+            mDatabaseRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     //Fetch image data from firebase database
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         //ImageUpload class require default constructor
-                        ImageUpload img = snapshot.getValue( ImageUpload.class );
-                        imgList.add( img );
+                        ImageUpload img = snapshot.getValue(ImageUpload.class);
+                        imgList.add(img);
 
                     }
-                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter( ImageListActivity.this, imgList );
-                    LinearLayoutManager LayoutManager = new LinearLayoutManager( ImageListActivity.this, LinearLayoutManager.VERTICAL, false );
-                    LayoutManager.setOrientation( LinearLayoutManager.VERTICAL );
-                    vertical_recycler_view.setLayoutManager( LayoutManager );
-                    vertical_recycler_view.setAdapter( recyclerAdapter );
+                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter(ImageListActivity.this, imgList);
+                    LinearLayoutManager LayoutManager = new LinearLayoutManager(ImageListActivity.this, LinearLayoutManager.VERTICAL, false);
+                    LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    vertical_recycler_view.setLayoutManager(LayoutManager);
+                    vertical_recycler_view.setAdapter(recyclerAdapter);
                     progressDialog.dismiss();
 
                 }
@@ -95,15 +95,14 @@ public class ImageListActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    System.out.println( "Cancelled" );
+                    System.out.println("Cancelled");
                 }
-            } );
+            });
 
 
-        }
-        else {
+        } else {
             answer1 = "No internet Connectivity";
-            Toast.makeText( getApplicationContext(), answer1, Toast.LENGTH_LONG ).show();
+            Toast.makeText(getApplicationContext(), answer1, Toast.LENGTH_LONG).show();
 
             Intent j = new Intent(this, NoConnection.class);
             startActivity(j);

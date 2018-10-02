@@ -39,39 +39,39 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener {
 
-    MyRecyclerViewAdapter adapter;
-    String answer;
-    ImageView image;
-    private AdView mAdView;
-    int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
-    RecyclerView recyclerView;
-    File storageDir = null;
     public static int permission = 0;
-    private DatabaseReference DatabaseRef;
     public long iterator = 0;
     public List<ImageUpload> mainimgList;
     public List UpdateCheckerList = new ArrayList<>();
     public String status = "false";
     public String currentVersion = "1.6";
     public String updateUrl = "https://play.google.com/store/apps/details?id=com.autodidact.developers.festivalwish";
+    MyRecyclerViewAdapter adapter;
+    String answer;
+    ImageView image;
+    int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    RecyclerView recyclerView;
+    File storageDir = null;
+    private AdView mAdView;
+    private DatabaseReference DatabaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
-                .getSystemService( Context.CONNECTIVITY_SERVICE);
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (null != activeNetwork) {
 
-        setContentView( R.layout.activity_main);
+            setContentView(R.layout.activity_main);
 
             MobileAds.initialize(this, "ca-app-pub-6574435909968892~2458260150");
             mAdView = findViewById(R.id.adView);
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
 
-            mainimgList = new ArrayList <>();
+            mainimgList = new ArrayList<>();
             DatabaseRef = FirebaseDatabase.getInstance().getReference("Update Checker/");
 
             DatabaseRef.addValueEventListener(new ValueEventListener() {
@@ -97,9 +97,10 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    System.out.println( "Cancelled" );
+                    System.out.println("Cancelled");
                 }
             });
 
@@ -114,42 +115,54 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                     // whenever data at this location is updated.
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         //ImageUpload class require default constructor
-                        ImageUpload img = snapshot.getValue( ImageUpload.class );
+                        ImageUpload img = snapshot.getValue(ImageUpload.class);
                         mainimgList.add(img);
                     }
 
-            // data to populate the RecyclerView with
+                    // data to populate the RecyclerView with
 
-            Calendar c;
-            c = Calendar.getInstance();
-            int month = c.get(Calendar.MONTH);
+                    Calendar c;
+                    c = Calendar.getInstance();
+                    int month = c.get(Calendar.MONTH);
 
-            image = (ImageView) findViewById(R.id.month_image);
-            if (month == 0) {image.setImageResource(R.drawable.january);
-            }
-            if (month == 1){image.setImageResource(R.drawable.feburary);
-            }
-            if (month == 2) {image.setImageResource(R.drawable.march);
-            }
-            if (month == 3){image.setImageResource(R.drawable.april);
-            }
-            if (month == 4) {image.setImageResource(R.drawable.may);
-            }
-            if (month == 5){image.setImageResource(R.drawable.june);
-            }
-            if (month == 6) {image.setImageResource(R.drawable.july);
-            }
-            if (month == 7){image.setImageResource(R.drawable.august);
-            }
-            if (month == 8) {image.setImageResource(R.drawable.september);
-            }
-            if (month == 9){image.setImageResource(R.drawable.october);
-            }
-            if (month == 10) {image.setImageResource(R.drawable.november);
-            }
-            if (month == 11){image.setImageResource(R.drawable.december);
-            }
-                    recyclerView = (RecyclerView) findViewById(R.id.rvNumbers);
+                    image = findViewById(R.id.month_image);
+                    if (month == 0) {
+                        image.setImageResource(R.drawable.january);
+                    }
+                    if (month == 1) {
+                        image.setImageResource(R.drawable.feburary);
+                    }
+                    if (month == 2) {
+                        image.setImageResource(R.drawable.march);
+                    }
+                    if (month == 3) {
+                        image.setImageResource(R.drawable.april);
+                    }
+                    if (month == 4) {
+                        image.setImageResource(R.drawable.may);
+                    }
+                    if (month == 5) {
+                        image.setImageResource(R.drawable.june);
+                    }
+                    if (month == 6) {
+                        image.setImageResource(R.drawable.july);
+                    }
+                    if (month == 7) {
+                        image.setImageResource(R.drawable.august);
+                    }
+                    if (month == 8) {
+                        image.setImageResource(R.drawable.september);
+                    }
+                    if (month == 9) {
+                        image.setImageResource(R.drawable.october);
+                    }
+                    if (month == 10) {
+                        image.setImageResource(R.drawable.november);
+                    }
+                    if (month == 11) {
+                        image.setImageResource(R.drawable.december);
+                    }
+                    recyclerView = findViewById(R.id.rvNumbers);
                     int numberOfColumns = 2;
                     recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), numberOfColumns));
                     adapter = new MyRecyclerViewAdapter(getApplicationContext(), mainimgList);
@@ -158,20 +171,19 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
                 @Override
                 public void onCancelled(DatabaseError error) {
-                    System.out.println( "Cancelled" );
+                    System.out.println("Cancelled");
                 }
 
             });
-            recyclerView = (RecyclerView) findViewById(R.id.rvNumbers);
+            recyclerView = findViewById(R.id.rvNumbers);
             int numberOfColumns = 2;
             recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), numberOfColumns));
             adapter = new MyRecyclerViewAdapter(getApplicationContext(), mainimgList);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
-        }
-        else {
+        } else {
             answer = "No internet Connectivity";
-            Toast.makeText( getApplicationContext(), answer, Toast.LENGTH_LONG ).show();
+            Toast.makeText(getApplicationContext(), answer, Toast.LENGTH_LONG).show();
             Intent j = new Intent(MainActivity.this, NoConnection.class);
             startActivity(j);
             finish();
@@ -179,19 +191,20 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         storagefile();
         // set up the RecyclerView
     }
-        private String getAppVersion(Context context) {
-            String result = "";
-            try {
-                result = context.getPackageManager()
-                        .getPackageInfo(context.getPackageName(), 0)
-                        .versionName;
-                result = result.replaceAll("[a-zA-Z]|-", "");
-            } catch (PackageManager.NameNotFoundException e) {
-                System.out.println( e.getMessage() );
-            }
 
-            return result;
+    private String getAppVersion(Context context) {
+        String result = "";
+        try {
+            result = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0)
+                    .versionName;
+            result = result.replaceAll("[a-zA-Z]|-", "");
+        } catch (PackageManager.NameNotFoundException e) {
+            System.out.println(e.getMessage());
         }
+
+        return result;
+    }
 
     public void storagefile() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -202,8 +215,9 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             }
         }
     }
-    private void requestPermission(final Context context){
-        ActivityCompat.requestPermissions((Activity) context,new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_WRITE_EXTERNAL_STORAGE);
+
+    private void requestPermission(final Context context) {
+        ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
     }
 
     @Override
@@ -222,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                 sharingIntent.setType("text/plain");
                 String shareBodyText = "https://play.google.com/store/apps/details?id=" +
                         appPackageName;
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"appName");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "appName");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
@@ -230,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             case R.id.rateus:
                 final String appPackageName1 = BuildConfig.APPLICATION_ID;
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData( Uri.parse("market://details?id=" + appPackageName1));
+                intent.setData(Uri.parse("market://details?id=" + appPackageName1));
                 startActivity(intent);
                 return true;
 
@@ -239,45 +253,46 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         }
     }
 
-        @Override
-        public void onItemClick(View view, int position) {
+    @Override
+    public void onItemClick(View view, int position) {
 
-            Intent i = new Intent(MainActivity.this, ImageListActivity.class);
-            Log.i("TAG", "You clicked number " + adapter.getItem(position) + ", which is at cell position " + position);
-            int x = position;
-            String text = mainimgList.get(x).getName() ;
-            Log.i("TAG", "You clicked number " + adapter.getItem(position) + ", which is at cell position " + position + text);
-            i.putExtra("DBPATH", text);
-            startActivity(i);
-        }
-
-        @Override
-        public void onUpdateNeeded(final String updateUrl) {
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("New version available")
-                    .setMessage("Please, update app to new version to continue reposting.")
-                    .setPositiveButton("Update",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    redirectStore(updateUrl);
-                                }
-                            }).setNegativeButton("No, thanks",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            }).create();
-            dialog.show();
-
-        }
-        private void redirectStore(String updateUrl) {
-            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+        Intent i = new Intent(MainActivity.this, ImageListActivity.class);
+        Log.i("TAG", "You clicked number " + adapter.getItem(position) + ", which is at cell position " + position);
+        int x = position;
+        String text = mainimgList.get(x).getName();
+        Log.i("TAG", "You clicked number " + adapter.getItem(position) + ", which is at cell position " + position + text);
+        i.putExtra("DBPATH", text);
+        startActivity(i);
     }
+
+    @Override
+    public void onUpdateNeeded(final String updateUrl) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("New version available")
+                .setMessage("Please, update app to new version to continue reposting.")
+                .setPositiveButton("Update",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                redirectStore(updateUrl);
+                            }
+                        }).setNegativeButton("No, thanks",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).create();
+        dialog.show();
+
+    }
+
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+}
 
 
 
