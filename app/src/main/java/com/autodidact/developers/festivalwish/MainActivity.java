@@ -66,11 +66,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
             setContentView(R.layout.activity_main);
 
-            MobileAds.initialize(this, "ca-app-pub-6574435909968892~2458260150");
-            mAdView = findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-
             mainimgList = new ArrayList<>();
             DatabaseRef = FirebaseDatabase.getInstance().getReference("Update Checker/");
 
