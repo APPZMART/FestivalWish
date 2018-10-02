@@ -13,16 +13,16 @@ public class SplashScreenActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView( R.layout.activity_splash_screen);
+        setContentView(R.layout.activity_splash_screen);
 
-        Thread timerThread = new Thread(){
-            public void run(){
-                try{
+        Thread timerThread = new Thread() {
+            public void run() {
+                try {
                     sleep(3000);
-                }catch(InterruptedException e){
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                }finally{
-                    Intent intent = new Intent(SplashScreenActivity.this,MainActivity.class);
+                } finally {
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
             }

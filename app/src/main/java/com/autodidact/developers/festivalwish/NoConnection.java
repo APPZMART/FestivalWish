@@ -9,16 +9,17 @@ import android.widget.Button;
 public class NoConnection extends AppCompatActivity {
 
     Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.no_connection );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.no_connection);
 
-        button = (Button) findViewById(R.id.button2);
+        button = findViewById(R.id.button2);
 
-        button.setOnClickListener( new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent refresh;
@@ -26,6 +27,6 @@ public class NoConnection extends AppCompatActivity {
                 startActivity(refresh);
                 finish();
             }
-        } );
+        });
     }
 }
