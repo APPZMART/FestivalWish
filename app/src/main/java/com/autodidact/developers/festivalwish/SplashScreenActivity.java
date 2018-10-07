@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 
 public class SplashScreenActivity extends Activity {
@@ -14,11 +17,13 @@ public class SplashScreenActivity extends Activity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
-        Thread timerThread = new Thread() {
+        ImageView image = findViewById(R.id.Splash);
+//        ImageView image = (ImageView)findViewById(R.id.imageView);
+        Animation animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin);
+        Thread timerThread1 = new Thread() {
             public void run() {
                 try {
-                    sleep(3000);
+                    sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
@@ -27,9 +32,13 @@ public class SplashScreenActivity extends Activity {
                 }
             }
         };
-        timerThread.start();
-    }
+        image.startAnimation(animation2);
+//        image.startAnimation(animation1);
+        timerThread1.start();
+//        image.startAnimation(animation1);
+//        timerThread1.start();
 
+    }
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub

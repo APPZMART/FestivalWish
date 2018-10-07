@@ -5,8 +5,9 @@
     android:background="@color/cardview_light_background">
 
     <ImageView
+        android:id="@+id/Splash"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/splash" />
 
 

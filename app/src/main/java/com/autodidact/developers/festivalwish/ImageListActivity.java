@@ -61,7 +61,7 @@ public class ImageListActivity extends AppCompatActivity {
             imgList = new ArrayList<>();
 
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Please wait. loading...");
+            progressDialog.setMessage("Please Wait For A While..");
             progressDialog.show();
 
 
