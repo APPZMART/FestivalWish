@@ -23,16 +23,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.net.URL;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -42,18 +45,21 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     public static int permission = 0;
     public long iterator = 0;
     public List<ImageUpload> mainimgList;
-    public List UpdateCheckerList = new ArrayList<>();
+    public static StorageReference MonthStorageRef;
+    public List<MonthImage> MonthimgList;
     public String status = "false";
-    public String currentVersion = "1.6";
+    public List UpdateCheckerList;
     public String updateUrl = "https://play.google.com/store/apps/details?id=com.autodidact.developers.festivalwish";
     MyRecyclerViewAdapter adapter;
     String answer;
-    ImageView image;
+    public String currentVersion = "1.7";
+
     int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     RecyclerView recyclerView;
     File storageDir = null;
-    private AdView mAdView;
-    private DatabaseReference DatabaseRef;
+    public ImageView image;
+    public String TableName;
+    public DatabaseReference DatabaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +70,11 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (null != activeNetwork) {
 
-            setContentView(R.layout.activity_main);
-
-            MobileAds.initialize(this, "ca-app-pub-6574435909968892~2458260150");
-            mAdView = findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-
+//            MobileAds.initialize(this, "ca-app-pub-6574435909968892~2458260150");
+//            mAdView = findViewById(R.id.adView);
+//            AdRequest adRequest = new AdRequest.Builder().build();
+//            mAdView.loadAd(adRequest);
+            UpdateCheckerList = new ArrayList<>();
             mainimgList = new ArrayList<>();
             DatabaseRef = FirebaseDatabase.getInstance().getReference("Update Checker/");
 
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
                     }
                     status = UpdateCheckerList.get(0).toString();
+
                     if (status == "true") {
                         currentVersion = UpdateCheckerList.get(1).toString();
                         String appVersion = getAppVersion(MainActivity.this);
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                             onUpdateNeeded(updateUrl);
                         }
                     }
+
                 }
 
                 @Override
@@ -103,84 +109,20 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                     System.out.println("Cancelled");
                 }
             });
+            setContentView(R.layout.activity_main);
 
-            // Read from the database
-            DatabaseRef = FirebaseDatabase.getInstance().getReference("MainList/");
 
-            DatabaseRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    iterator = dataSnapshot.getChildrenCount();
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        //ImageUpload class require default constructor
-                        ImageUpload img = snapshot.getValue(ImageUpload.class);
-                        mainimgList.add(img);
-                    }
-
-                    // data to populate the RecyclerView with
-
-                    Calendar c;
-                    c = Calendar.getInstance();
-                    int month = c.get(Calendar.MONTH);
-
-                    image = findViewById(R.id.month_image);
-                    if (month == 0) {
-                        image.setImageResource(R.drawable.january);
-                    }
-                    if (month == 1) {
-                        image.setImageResource(R.drawable.feburary);
-                    }
-                    if (month == 2) {
-                        image.setImageResource(R.drawable.march);
-                    }
-                    if (month == 3) {
-                        image.setImageResource(R.drawable.april);
-                    }
-                    if (month == 4) {
-                        image.setImageResource(R.drawable.may);
-                    }
-                    if (month == 5) {
-                        image.setImageResource(R.drawable.june);
-                    }
-                    if (month == 6) {
-                        image.setImageResource(R.drawable.july);
-                    }
-                    if (month == 7) {
-                        image.setImageResource(R.drawable.august);
-                    }
-                    if (month == 8) {
-                        image.setImageResource(R.drawable.september);
-                    }
-                    if (month == 9) {
-                        image.setImageResource(R.drawable.october);
-                    }
-                    if (month == 10) {
-                        image.setImageResource(R.drawable.november);
-                    }
-                    if (month == 11) {
-                        image.setImageResource(R.drawable.december);
-                    }
-                    recyclerView = findViewById(R.id.rvNumbers);
-                    int numberOfColumns = 2;
-                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), numberOfColumns));
-                    adapter = new MyRecyclerViewAdapter(getApplicationContext(), mainimgList);
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    System.out.println("Cancelled");
-                }
-
-            });
             recyclerView = findViewById(R.id.rvNumbers);
-            int numberOfColumns = 2;
-            recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), numberOfColumns));
+            Data("MainList/");
+//            MonthStorageRef = FirebaseStorage.getInstance().getReference("Month/april.jpg");
+//            image = (ImageView) findViewById(R.id.month_image);
+//           String x = MonthStorageRef.getPath();
+//            Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/testimage-1e7d6.appspot.com/o/Month%2Fapril.jpg?alt=media&token=1caa3bcb-af6f-481a-aa0d-8d6a5cd5f582").into(image);
             adapter = new MyRecyclerViewAdapter(getApplicationContext(), mainimgList);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
+
+
         } else {
             answer = "No internet Connectivity";
             Toast.makeText(getApplicationContext(), answer, Toast.LENGTH_LONG).show();
@@ -188,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             startActivity(j);
             finish();
         }
+
         storagefile();
         // set up the RecyclerView
     }
@@ -207,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     }
 
     public void storagefile() {
+
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             if (PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 permission = 1;
@@ -238,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                         appPackageName;
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "appName");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
-                startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+                startActivity(Intent.createChooser(sharingIntent, "Sharing Option"));
                 return true;
 
             case R.id.rateus:
@@ -292,7 +236,76 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    public List<ImageUpload> Data(final String TableName) {
+        mainimgList = new ArrayList<>();
+        DatabaseRef = FirebaseDatabase.getInstance().getReference(TableName);
+
+        DatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                iterator = dataSnapshot.getChildrenCount();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ImageUpload img = snapshot.getValue(ImageUpload.class);
+                    mainimgList.add(img);
+                }
+                int numberOfColumns = 2;
+                recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), numberOfColumns));
+                adapter = new MyRecyclerViewAdapter(getApplicationContext(), mainimgList);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.out.println("Cancelled");
+            }
+
+        });
+        String MonthVal = "Month/";
+        MonthData(MonthVal);
+        return mainimgList;
+
+    }
+
+    public List<MonthImage> MonthData(final String MonthName) {
+        MonthimgList = new ArrayList<>();
+        DatabaseRef = FirebaseDatabase.getInstance().getReference(MonthName);
+
+        DatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                iterator = dataSnapshot.getChildrenCount();
+                MonthimgList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MonthImage monthimg = snapshot.getValue(MonthImage.class);
+                    MonthimgList.add(monthimg);
+                }
+                getmonthimage();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.out.println("Cancelled");
+            }
+
+        });
+
+        return MonthimgList;
+
+    }
+
+    public void getmonthimage() {
+        Calendar c;
+        c = Calendar.getInstance();
+        int month = c.get(Calendar.MONTH);
+        image = findViewById(R.id.month_image);
+        if (MonthimgList.size() > 0) {
+            Glide.with(this).load(MonthimgList.get(month).getUrl()).into(image);
+        }
+    }
 }
+
 
 
 

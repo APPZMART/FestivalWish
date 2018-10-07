@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "94507784938-8dq4oshlujljcm8aflgmkvmgmbeb0bii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.autodidact.developers.festivalwish",
+            "certificate_hash": "e1e956992ee7a858eefb71140201f3154f767429"
+          }
+        },
+        {
           "client_id": "94507784938-igjkt56vqkorqmn7oi7kv9rodje5g7u7.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -56,7 +64,8 @@
         "ads_service": {
           "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-6574435909968892~2458260150"
     },
     {
       "client_info": {

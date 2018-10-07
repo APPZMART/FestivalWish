@@ -124,7 +124,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     i.setType("image/*");
                     Uri uri = FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), localFile);
                     i.putExtra(Intent.EXTRA_STREAM, uri);
-                    i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.autodidact.developers.festivalwish");
+//                    i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.autodidact.developers.festivalwish");
                     context.startActivity(i);
                 } catch (Exception e) {
                     Toast.makeText(context, "Whatsapp is not installed in your device", Toast.LENGTH_LONG).show();
@@ -156,7 +156,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 //                   Uri uri = Uri.fromFile(file);
                 Uri uri = FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), localFile);
                 i.putExtra(Intent.EXTRA_STREAM, uri);
-                i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.autodidact.developers.festivalwish");
+//                i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.autodidact.developers.festivalwish");
                 context.startActivity(Intent.createChooser(i, "Share"));
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -207,13 +207,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView itemimage;
+        public ImageView itemimage;
 
 
         public ViewHolder(View view) {
             super(view);
 
-
+            itemimage = view.findViewById(R.id.PhotoList);
             final FloatingActionButton myFab = view.findViewById(R.id.ToShare);
             final FloatingActionButton downmyFab = view.findViewById(R.id.ToDownload);
             final FloatingActionButton whatsappmyFab = view.findViewById(R.id.Towhatsapp);
